@@ -1,0 +1,279 @@
+/* ============================================================================
+   StackLab — Component Styles (Stack Visualizer, Keypad, Metric Cards, Tables)
+   ============================================================================ */
+
+/* KPI Stat Cards */
+.kpi-card {
+  background: var(--sl-surface);
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--sl-shadow-sm);
+}
+
+.kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--sl-accent-soft);
+  color: var(--sl-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.kpi-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  color: var(--sl-text-muted);
+  font-weight: 500;
+}
+
+/* Quick Action Cards */
+.quick-action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.1rem;
+  border-radius: var(--sl-radius);
+  border: 1px solid var(--sl-border);
+  background: var(--sl-surface);
+  color: var(--sl-text);
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  height: 100%;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--sl-accent);
+  box-shadow: 0 8px 22px var(--sl-accent-glow);
+  color: var(--sl-text);
+}
+
+/* Expression Calculator Display & Keypad */
+.calc-display-input {
+  font-size: 1.35rem;
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+  letter-spacing: 0.02em;
+}
+
+.calc-keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.55rem;
+}
+
+.calc-key-btn {
+  padding: 0.78rem 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: var(--sl-radius-sm);
+  border: 1px solid var(--sl-border);
+  background-color: var(--sl-surface-elevated);
+  color: var(--sl-text);
+  transition: transform 0.1s ease, background-color 0.14s ease, border-color 0.14s ease;
+}
+
+.calc-key-btn:hover {
+  border-color: var(--sl-accent);
+  background-color: var(--sl-accent-soft);
+}
+
+.calc-key-btn:active {
+  transform: scale(0.96);
+}
+
+.calc-key-op {
+  color: #818cf8;
+  background-color: var(--sl-accent-soft);
+  border-color: var(--sl-border-strong);
+}
+
+[data-theme="light"] .calc-key-op {
+  color: #4338ca;
+}
+
+.calc-result-hero {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(59, 130, 246, 0.08));
+  border: 1px solid var(--sl-border-strong);
+  border-radius: var(--sl-radius-sm);
+  padding: 1rem 1.15rem;
+}
+
+.calc-result-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  word-break: break-all;
+}
+
+.code-readout {
+  background: var(--sl-code-bg);
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-sm);
+  padding: 0.75rem 0.95rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.94rem;
+  word-break: break-word;
+}
+
+/* Vertical Animated Stack Container */
+.stack-tower-frame {
+  background: var(--sl-code-bg);
+  border: 2px solid var(--sl-border);
+  border-top: 2px dashed var(--sl-border-strong);
+  border-radius: 0 0 var(--sl-radius) var(--sl-radius);
+  min-height: 290px;
+  max-height: 390px;
+  overflow-y: auto;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.48rem;
+}
+
+.stack-tower-frame.compact {
+  min-height: 210px;
+  max-height: 270px;
+}
+
+.stack-empty-placeholder {
+  margin: auto;
+  text-align: center;
+  color: var(--sl-text-muted);
+  font-size: 0.86rem;
+  padding: 1.5rem 0.75rem;
+}
+
+.stack-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.62rem 0.85rem;
+  border-radius: 10px;
+  background: var(--sl-surface-elevated);
+  border: 1px solid var(--sl-border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.94rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stack-node.is-top {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(59, 130, 246, 0.14));
+  border-color: var(--sl-accent);
+  box-shadow: 0 4px 14px var(--sl-accent-glow);
+}
+
+.stack-node-index {
+  font-size: 0.75rem;
+  color: var(--sl-text-muted);
+  flex-shrink: 0;
+}
+
+.stack-node-value {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stack-node-tags {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+@keyframes stackPushIn {
+  from { opacity: 0; transform: translateY(-16px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes stackPeekPulse {
+  0%, 100% { box-shadow: 0 4px 14px var(--sl-accent-glow); }
+  50% { box-shadow: 0 0 0 6px var(--sl-accent-soft); }
+}
+
+.stack-node.anim-push {
+  animation: stackPushIn 0.26s ease-out;
+}
+
+.stack-node.anim-peek {
+  animation: stackPeekPulse 0.45s ease-in-out 2;
+}
+
+/* Visualizer Active Row */
+.viz-log-row {
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.viz-row-active {
+  outline: 2px solid var(--sl-accent);
+  outline-offset: -2px;
+}
+
+/* Position Pointer Code Block (Validation Module) */
+.val-pointer-pre {
+  background: var(--sl-code-bg);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  border-radius: var(--sl-radius-sm);
+  padding: 0.85rem 1rem;
+  color: #f87171;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.92rem;
+  margin: 0;
+  overflow-x: auto;
+}
+
+[data-theme="light"] .val-pointer-pre {
+  color: #dc2626;
+}
+
+/* Telemetry Bar Track */
+.telemetry-bar-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--sl-code-bg);
+  overflow: hidden;
+  border: 1px solid var(--sl-border);
+}
+
+.telemetry-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Toast Container */
+#toast-container {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 1080;
+  max-width: 340px;
+}
+
+/* Calculator variable entry and refined keypad */
+.variable-panel { padding: 1rem; border: 1px solid var(--sl-border); border-radius: 12px; background: var(--sl-surface-elevated); }
+.calc-alpha-keys { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem; }
+.calc-alpha-keys .calc-key-btn { min-width: 38px; padding: .45rem .7rem; font-size: .92rem; color: var(--sl-accent-2); }
+.calc-keypad-grid { gap: .6rem; }
+.calc-key-btn { min-height: 46px; box-shadow: 0 2px 0 rgba(0,0,0,.08); }
+.calc-key-btn:hover { transform: translateY(-1px); }
+.calc-display-input { min-height: 58px; border-width: 1px; }
+.calc-result-hero { padding: 1.2rem 1.35rem; }

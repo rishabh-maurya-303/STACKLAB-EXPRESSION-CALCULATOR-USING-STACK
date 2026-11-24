@@ -1,0 +1,63 @@
+/* ============================================================================
+   StackLab — Responsive Layout Adjustments
+   ============================================================================ */
+
+@media (max-width: 991.98px) {
+  .desktop-sidebar {
+    display: none;
+  }
+
+  .app-topbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .workspace-content {
+    padding: 1rem;
+  }
+
+  .sl-hero-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .calc-display-input {
+    font-size: 1.12rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .calc-key-btn {
+    padding: 0.68rem 0.35rem;
+    font-size: 0.96rem;
+  }
+
+  .calc-result-number {
+    font-size: 1.55rem;
+  }
+
+  .kpi-value {
+    font-size: 1.35rem;
+  }
+
+  .stack-tower-frame {
+    min-height: 230px;
+    max-height: 310px;
+  }
+
+  #toast-container {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .workspace-content { max-width: 1560px; }
+  .calc-key-btn { min-height: 50px; }
+}
+@media (max-width: 575.98px) {
+  .calc-alpha-keys { gap: .35rem; }
+  .calc-alpha-keys > span { width: 100%; margin-bottom: .15rem; }
+  .variable-panel { padding: .8rem; }
+}

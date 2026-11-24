@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StackLab — Advanced Expression Calculator</title>
+  <meta name="description" content="Academic Data Structures & Algorithms project demonstrating LIFO Stack applications: expression conversion, evaluation, step-by-step visualization, validation, and Undo/Redo." />
+
+  <!-- Typography: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5.3 & Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+  <!-- StackLab Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ==================== DESKTOP SIDEBAR ==================== -->
+    <aside class="desktop-sidebar" aria-label="Primary Navigation">
+      <div class="brand-header d-flex align-items-center gap-2">
+        <span class="brand-mark"><i class="bi bi-layers-fill"></i></span>
+        <div>
+          <div class="brand-title">StackLab</div>
+          <div class="brand-sub">DSA Expression Workbench</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Core Modules</div>
+        <a href="#dashboard" class="sidebar-link active" data-nav-target="dashboard"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+        <a href="#calculator" class="sidebar-link" data-nav-target="calculator"><i class="bi bi-calculator-fill"></i><span>Expression Calculator</span></a>
+        <a href="#converter" class="sidebar-link" data-nav-target="converter"><i class="bi bi-arrow-left-right"></i><span>Notation Converter</span></a>
+        <a href="#visualizer" class="sidebar-link" data-nav-target="visualizer"><i class="bi bi-play-btn-fill"></i><span>Stack Visualizer</span></a>
+        <a href="#playground" class="sidebar-link" data-nav-target="playground"><i class="bi bi-box-seam-fill"></i><span>Stack Playground</span></a>
+
+        <div class="sidebar-section-label mt-2">Analysis &amp; State</div>
+        <a href="#analysis" class="sidebar-link" data-nav-target="analysis"><i class="bi bi-bar-chart-line-fill"></i><span>Algorithm Analysis</span></a>
+        <a href="#validation" class="sidebar-link" data-nav-target="validation"><i class="bi bi-shield-check"></i><span>Expression Validation</span></a>
+        <a href="#history" class="sidebar-link" data-nav-target="history"><i class="bi bi-clock-history"></i><span>Calculation History</span></a>
+        <a href="#undoredo" class="sidebar-link" data-nav-target="undoredo"><i class="bi bi-arrow-counterclockwise"></i><span>Undo / Redo</span></a>
+      </nav>
+
+      <div class="sidebar-footer d-flex flex-column gap-2">
+        <a href="#about" class="sidebar-link mb-0" data-nav-target="about"><i class="bi bi-mortarboard-fill"></i><span>About Project</span></a>
+        <button type="button" class="btn btn-sm btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 theme-toggle-btn">
+          <i class="bi bi-sun-fill"></i>
+          <span class="theme-label">Light Mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ==================== MOBILE OFFCANVAS SIDEBAR ==================== -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+      <div class="offcanvas-header border-bottom">
+        <div class="d-flex align-items-center gap-2" id="mobileSidebarLabel">
+          <span class="brand-mark"><i class="bi bi-layers-fill"></i></span>
+          <div>
+            <div class="brand-title">StackLab</div>
+            <div class="brand-sub">DSA Expression Workbench</div>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column p-2">
+        <div class="sidebar-section-label">Core Modules</div>
+        <a href="#dashboard" class="sidebar-link active" data-nav-target="dashboard"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+        <a href="#calculator" class="sidebar-link" data-nav-target="calculator"><i class="bi bi-calculator-fill"></i><span>Expression Calculator</span></a>
+        <a href="#converter" class="sidebar-link" data-nav-target="converter"><i class="bi bi-arrow-left-right"></i><span>Notation Converter</span></a>
+        <a href="#visualizer" class="sidebar-link" data-nav-target="visualizer"><i class="bi bi-play-btn-fill"></i><span>Stack Visualizer</span></a>
+        <a href="#playground" class="sidebar-link" data-nav-target="playground"><i class="bi bi-box-seam-fill"></i><span>Stack Playground</span></a>
+
+        <div class="sidebar-section-label mt-2">Analysis &amp; State</div>
+        <a href="#analysis" class="sidebar-link" data-nav-target="analysis"><i class="bi bi-bar-chart-line-fill"></i><span>Algorithm Analysis</span></a>
+        <a href="#validation" class="sidebar-link" data-nav-target="validation"><i class="bi bi-shield-check"></i><span>Expression Validation</span></a>
+        <a href="#history" class="sidebar-link" data-nav-target="history"><i class="bi bi-clock-history"></i><span>Calculation History</span></a>
+        <a href="#undoredo" class="sidebar-link" data-nav-target="undoredo"><i class="bi bi-arrow-counterclockwise"></i><span>Undo / Redo</span></a>
+        <hr class="my-2 opacity-25" />
+        <a href="#about" class="sidebar-link" data-nav-target="about"><i class="bi bi-mortarboard-fill"></i><span>About Project</span></a>
+      </div>
+    </div>
+
+    <!-- ==================== MAIN WORKSPACE ==================== -->
+    <div class="main-workspace">
+      <header class="app-topbar d-flex align-items-center justify-content-between gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-label="Open menu">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <h1 id="topbar-page-title" class="h5 mb-0 fw-bold">Dashboard</h1>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-primary-subtle text-primary-emphasis d-none d-sm-inline-flex align-items-center gap-1 py-2 px-2">
+            <i class="bi bi-cpu"></i> Custom LIFO Stack Engine
+          </span>
+          <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 theme-toggle-btn" title="Toggle Theme">
+            <i class="bi bi-sun-fill"></i>
+            <span class="theme-label d-none d-md-inline">Light Mode</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace-content">
+        <!-- ================================================================
+             MODULE 1: DASHBOARD
+             ================================================================ -->
+        <section id="section-dashboard" class="app-section">
+          <div id="dash-storage-recovery" class="alert alert-warning py-2 px-3 small d-none mb-3">
+            <i class="bi bi-shield-exclamation me-1"></i> Corrupted localStorage data was detected and safely reset to clean defaults.
+          </div>
+
+          <div class="sl-hero-card mb-4">
+            <div class="row align-items-center g-3">
+              <div class="col-lg-8">
+                <span class="badge bg-primary mb-2">Data Structures &amp; Algorithms Project</span>
+                <h2 class="h3 fw-bold mb-2">StackLab — Advanced Expression Calculator</h2>
+                <p class="text-muted mb-3">
+                  Interactive educational developer workbench demonstrating real-world applications of the
+                  <strong>Stack (LIFO)</strong> Abstract Data Type across mathematical expression parsing, six-way notation conversion,
+                  Postfix/Prefix evaluation, bracket validation, step-by-step trace visualization, and two-stack Undo/Redo —
+                  implemented purely in Vanilla JavaScript without <code>eval()</code>.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn btn-primary btn-sm px-3" data-nav-target="calculator">
+                    <i class="bi bi-calculator me-1"></i> Launch Calculator
+                  </button>
+                  <button type="button" class="btn btn-outline-primary btn-sm px-3" data-nav-target="visualizer">
+                    <i class="bi bi-play-circle me-1"></i> Open Stack Visualizer
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-nav-target="about">
+                    <i class="bi bi-info-circle me-1"></i> Project Overview
+                  </button>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="code-readout small">
+                  <div class="text-muted xsmall mb-1">LIFO Stack Invariant</div>
+                  <div><code>push(x)</code> &rarr; Top insertion <code>O(1)</code></div>
+                  <div><code>pop()</code>   &rarr; Top removal <code>O(1)</code></div>
+                  <div><code>peek()</code>  &rarr; Top inspection <code>O(1)</code></div>
+                  <div class="mt-2 text-primary xsmall">Precedence: <code>( )</code> &gt; <code>^</code> (R) &gt; <code>u-</code> &gt; <code>* / %</code> &gt; <code>+ -</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real Activity KPIs -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-xl-3">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Total Calculations</div>
+                  <div id="dash-total-calcs" class="kpi-value">0</div>
+                </div>
+                <span class="kpi-icon"><i class="bi bi-calculator"></i></span>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Total Conversions</div>
+                  <div id="dash-total-convs" class="kpi-value">0</div>
+                </div>
+                <span class="kpi-icon"><i class="bi bi-arrow-left-right"></i></span>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Total Stack Operations</div>
+                  <div id="dash-total-ops" class="kpi-value">0</div>
+                </div>
+                <span class="kpi-icon"><i class="bi bi-layers"></i></span>
+              </div>
+            </div>
+            <div class="col-6 col-xl-3">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Saved History Records</div>
+                  <div id="dash-history-count" class="kpi-value">0</div>
+                </div>
+                <span class="kpi-icon"><i class="bi bi-clock-history"></i></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Grid to All Modules -->
+          <h3 class="h6 fw-semibold text-uppercase text-muted mb-3">Quick-Action Modules</h3>
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-lg-4">
+              <a href="#calculator" class="quick-action-card" data-nav-target="calculator">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-calculator-fill text-primary me-2"></i>Expression Calculator</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Evaluate Infix expressions via Shunting-Yard &amp; Postfix/Prefix Stack engines.</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <a href="#converter" class="quick-action-card" data-nav-target="converter">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-arrow-left-right text-primary me-2"></i>Notation Converter</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Convert seamlessly across all 6 Infix, Postfix, and Prefix pairs.</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <a href="#visualizer" class="quick-action-card" data-nav-target="visualizer">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-play-btn-fill text-primary me-2"></i>Stack Visualizer</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Step forward/backward through real algorithm traces with live stack animations.</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <a href="#playground" class="quick-action-card" data-nav-target="playground">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-box-seam-fill text-primary me-2"></i>Stack Playground</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Experiment directly with Push, Pop, Peek, capacity limits, Overflow &amp; Underflow.</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <a href="#validation" class="quick-action-card" data-nav-target="validation">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-shield-check text-primary me-2"></i>Expression Validation</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Diagnose lexical errors, mismatched brackets, syntax faults &amp; division by zero.</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+              <a href="#undoredo" class="quick-action-card" data-nav-target="undoredo">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-semibold"><i class="bi bi-arrow-counterclockwise text-primary me-2"></i>Undo / Redo &amp; Analysis</span>
+                  <i class="bi bi-arrow-right text-muted"></i>
+                </div>
+                <span class="small text-muted">Inspect live Dual-Stack Undo/Redo state and Big-O execution telemetry.</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold"><i class="bi bi-activity me-2 text-primary"></i>Recent Activity</span>
+                  <button type="button" class="btn btn-sm btn-link text-decoration-none p-0" data-nav-target="history">View History</button>
+                </div>
+                <div class="sl-card-body py-2">
+                  <ul id="dash-activity-list" class="list-group list-group-flush"></ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold"><i class="bi bi-diagram-3 me-2 text-primary"></i>Implemented Stack Algorithms</span>
+                  <button type="button" class="btn btn-sm btn-link text-decoration-none p-0" data-nav-target="analysis">Complexity Table</button>
+                </div>
+                <div class="sl-card-body">
+                  <div class="row g-2 small">
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>Infix &rarr; Postfix</strong><div class="text-muted xsmall">Shunting-Yard (1 Stack)</div></div></div>
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>Infix &rarr; Prefix</strong><div class="text-muted xsmall">Direct Two-Stack Builder</div></div></div>
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>Postfix / Prefix Eval</strong><div class="text-muted xsmall">L&rarr;R &amp; R&rarr;L Operand Stacks</div></div></div>
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>4 Reverse Conversions</strong><div class="text-muted xsmall">Postfix/Prefix &harr; Infix/Cross</div></div></div>
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>Bracket Matching</strong><div class="text-muted xsmall">LIFO Parentheses Validator</div></div></div>
+                    <div class="col-sm-6"><div class="code-readout py-2"><strong>Dual-Stack Undo/Redo</strong><div class="text-muted xsmall">Independent Undo &amp; Redo Stacks</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 2: EXPRESSION CALCULATOR
+             ================================================================ -->
+        <section id="section-calculator" class="app-section d-none">
+          <div class="row g-4">
+            <!-- Left: Input & Keypad -->
+            <div class="col-lg-5">
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <span class="fw-semibold"><i class="bi bi-calculator-fill text-primary me-2"></i>Expression Input</span>
+                  <select id="calc-example-select" class="form-select form-select-sm w-auto" aria-label="Example expressions">
+                    <option value="">Examples...</option>
+                    <option value="(5+3)*2">(5+3)*2 = 16</option>
+                    <option value="5+3*2">5+3*2 = 11</option>
+                    <option value="2^3^2">2^3^2 = 512</option>
+                    <option value="-2^2">-2^2 = -4</option>
+                    <option value="(-2)^2">(-2)^2 = 4</option>
+                    <option value="-5+3">-5+3 = -2</option>
+                    <option value="3.5*2">3.5*2 = 7</option>
+                    <option value="20/5+2">20/5+2 = 6</option>
+                    <option value="(10+5)*2-8%3">(10+5)*2-8%3 = 28</option>
+                  </select>
+                </div>
+                <div class="sl-card-body">
+                  <!-- Integrated Undo / Redo Toolbar -->
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Undo and Redo">
+                      <button id="calc-undo-btn" type="button" class="btn btn-outline-secondary" disabled title="Undo (Ctrl+Z)">
+                        <i class="bi bi-arrow-counterclockwise"></i> Undo (<span id="calc-undo-count">0</span>)
+                      </button>
+                      <button id="calc-redo-btn" type="button" class="btn btn-outline-secondary" disabled title="Redo (Ctrl+Y)">
+                        <i class="bi bi-arrow-clockwise"></i> Redo (<span id="calc-redo-count">0</span>)
+                      </button>
+                      <button id="calc-clear-ur-btn" type="button" class="btn btn-outline-secondary" title="Clear Undo/Redo Stacks">
+                        <i class="bi bi-eraser"></i>
+                      </button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 xsmall" data-nav-target="undoredo">Inspect Stacks &rarr;</button>
+                  </div>
+
+                  <input
+                    id="calc-expr-input"
+                    type="text"
+                    class="form-control font-monospace calc-display-input mb-3"
+                    placeholder="Enter expression e.g. (a+b)*c"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+
+                  <div class="variable-panel mb-3">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                      <label for="calc-variable-values" class="form-label mb-0 fw-semibold"><i class="bi bi-braces-asterisk me-1"></i>Variable values</label>
+                      <span class="small text-muted">For alphabetic expressions</span>
+                    </div>
+                    <input id="calc-variable-values" type="text" class="form-control font-monospace" placeholder="Example: a=5, b=3, c=2" autocomplete="off" />
+                    <div class="form-text">Use single-letter variables (a–z). Assign a numeric value to every variable used, e.g. <code>a=5, b=3</code>.</div>
+                  </div>
+                  <div id="calc-alert-box" class="alert d-none" role="alert"></div>
+
+                  <!-- Interactive Keypad -->
+                  <div class="calc-alpha-keys mb-2" aria-label="Variable keys">
+                    <span class="small text-muted me-1">VARIABLES</span>
+                    <button type="button" class="calc-key-btn calc-key" data-key="a">a</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="b">b</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="c">c</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="x">x</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="y">y</button>
+                  </div>
+                  <div class="calc-keypad-grid mb-3">
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="(">(</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key=")">)</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="%">%</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="^">^</button>
+
+                    <button type="button" class="calc-key-btn calc-key" data-key="7">7</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="8">8</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="9">9</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="/">/</button>
+
+                    <button type="button" class="calc-key-btn calc-key" data-key="4">4</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="5">5</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="6">6</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="*">*</button>
+
+                    <button type="button" class="calc-key-btn calc-key" data-key="1">1</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="2">2</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key="3">3</button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="-">-</button>
+
+                    <button type="button" class="calc-key-btn calc-key" data-key="0">0</button>
+                    <button type="button" class="calc-key-btn calc-key" data-key=".">.</button>
+                    <button id="calc-backspace-btn" type="button" class="calc-key-btn text-warning" title="Backspace"><i class="bi bi-backspace"></i></button>
+                    <button type="button" class="calc-key-btn calc-key-op calc-key" data-key="+">+</button>
+                  </div>
+
+                  <div class="d-grid gap-2">
+                    <div class="d-flex gap-2">
+                      <button id="calc-calculate-btn" type="button" class="btn btn-primary flex-grow-1 fw-semibold">
+                        <i class="bi bi-play-fill me-1"></i> Calculate
+                      </button>
+                      <button id="calc-validate-btn" type="button" class="btn btn-outline-info">
+                        <i class="bi bi-check2-circle me-1"></i> Validate
+                      </button>
+                      <button id="calc-clear-btn" type="button" class="btn btn-outline-danger">
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Results Panel -->
+            <div class="col-lg-7">
+              <div id="calc-results-panel" class="sl-card h-100">
+                <div class="sl-card-header">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fw-semibold">Calculation Results</span>
+                    <span id="calc-res-status" class="badge bg-secondary">READY</span>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button id="calc-visualize-btn" type="button" class="btn btn-sm btn-outline-primary" disabled>
+                      <i class="bi bi-play-btn me-1"></i> Visualize
+                    </button>
+                    <button id="calc-copy-btn" type="button" class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-clipboard me-1"></i> Copy Result
+                    </button>
+                  </div>
+                </div>
+                <div class="sl-card-body">
+                  <div class="calc-result-hero mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                      <div class="xsmall text-muted text-uppercase fw-semibold">Final Numerical Result</div>
+                      <div id="calc-res-final" class="calc-result-number font-monospace">—</div>
+                    </div>
+                    <div class="text-end">
+                      <div class="xsmall text-muted">Original Expression</div>
+                      <div id="calc-res-original" class="font-monospace fw-semibold">—</div>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Postfix Notation (RPN)</label>
+                      <div id="calc-res-postfix" class="code-readout">—</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Prefix Notation (Polish)</label>
+                      <div id="calc-res-prefix" class="code-readout">—</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Stack Execution Explanation</label>
+                    <div id="calc-res-explanation" class="small text-muted">Enter an expression and click Calculate to view Stack conversion and evaluation details.</div>
+                  </div>
+
+                  <div>
+                    <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-2">Intermediate Stack Operations</label>
+                    <div class="table-responsive">
+                      <table class="table table-sm align-middle mb-0">
+                        <thead>
+                          <tr>
+                            <th style="width:60px;">#</th>
+                            <th style="width:90px;">Op</th>
+                            <th>Evaluation Step</th>
+                          </tr>
+                        </thead>
+                        <tbody id="calc-res-ops-body">
+                          <tr><td colspan="3" class="text-center text-muted small py-3">No operations executed yet.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 3: NOTATION CONVERTER (ALL 6 CONVERSIONS)
+             ================================================================ -->
+        <section id="section-converter" class="app-section d-none">
+          <div class="sl-card mb-4">
+            <div class="sl-card-header flex-wrap">
+              <span class="fw-semibold"><i class="bi bi-arrow-left-right text-primary me-2"></i>Six-Way Stack Notation Converter</span>
+              <select id="conv-example-select" class="form-select form-select-sm w-auto" aria-label="Converter examples"></select>
+            </div>
+            <div class="sl-card-body">
+              <div class="row g-3 align-items-end mb-3">
+                <div class="col-md-4">
+                  <label for="conv-source-select" class="form-label small fw-medium">Source Notation</label>
+                  <select id="conv-source-select" class="form-select">
+                    <option value="infix" selected>Infix (Standard)</option>
+                    <option value="postfix">Postfix (RPN)</option>
+                    <option value="prefix">Prefix (Polish)</option>
+                  </select>
+                </div>
+                <div class="col-md-1 d-grid">
+                  <button id="conv-swap-btn" type="button" class="btn btn-outline-secondary" title="Swap Source &amp; Target">
+                    <i class="bi bi-arrow-left-right"></i>
+                  </button>
+                </div>
+                <div class="col-md-4">
+                  <label for="conv-target-select" class="form-label small fw-medium">Target Notation</label>
+                  <select id="conv-target-select" class="form-select">
+                    <option value="infix">Infix (Parenthesized)</option>
+                    <option value="postfix" selected>Postfix (RPN)</option>
+                    <option value="prefix">Prefix (Polish)</option>
+                  </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                  <button id="conv-convert-btn" type="button" class="btn btn-primary flex-grow-1">Convert</button>
+                  <button id="conv-clear-btn" type="button" class="btn btn-outline-secondary">Clear</button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="conv-expr-input" class="form-label small fw-medium">Source Expression <span class="text-muted xsmall">(Separate Postfix/Prefix tokens with spaces; use <code>u-</code> for unary negation)</span></label>
+                <input id="conv-expr-input" type="text" class="form-control font-monospace" placeholder="e.g., (5+3)*2 or 2^3^2" autocomplete="off" />
+              </div>
+
+              <div id="conv-alert-box" class="alert d-none" role="alert"></div>
+
+              <div class="calc-result-hero d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="xsmall text-muted text-uppercase fw-semibold">Converted Output</span>
+                    <span id="conv-algo-badge" class="badge bg-secondary">READY</span>
+                  </div>
+                  <div id="conv-result-output" class="fs-4 fw-bold font-monospace">Result will appear here</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <button id="conv-visualize-btn" type="button" class="btn btn-sm btn-outline-primary" disabled>
+                    <i class="bi bi-play-btn me-1"></i> Visualize Steps
+                  </button>
+                  <button id="conv-copy-btn" type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-clipboard me-1"></i> Copy Result
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sl-card">
+            <div class="sl-card-header">
+              <span class="fw-semibold">Step-by-Step Stack Conversion Trace</span>
+            </div>
+            <div class="sl-card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th style="width:65px;">Step</th>
+                      <th style="width:90px;">Token</th>
+                      <th style="width:110px;">Operation</th>
+                      <th>Stack State</th>
+                      <th>Output</th>
+                      <th>Explanation</th>
+                    </tr>
+                  </thead>
+                  <tbody id="conv-steps-body">
+                    <tr><td colspan="6" class="text-center text-muted small py-4">Convert an expression above to see every Stack push/pop step.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 4: INTERACTIVE STACK VISUALIZER
+             ================================================================ -->
+        <section id="section-visualizer" class="app-section d-none">
+          <div class="sl-card mb-4">
+            <div class="sl-card-body">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                  <label for="viz-mode-select" class="form-label xsmall text-muted text-uppercase fw-semibold">Visualization Mode</label>
+                  <select id="viz-mode-select" class="form-select form-select-sm">
+                    <option value="infix-to-postfix">1. Infix to Postfix Conversion</option>
+                    <option value="infix-to-prefix">2. Infix to Prefix Conversion</option>
+                    <option value="postfix-eval">3. Postfix Evaluation</option>
+                    <option value="prefix-eval">4. Prefix Evaluation</option>
+                    <option value="bracket-match">5. Bracket Matching</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="viz-expr-input" class="form-label xsmall text-muted text-uppercase fw-semibold">Expression</label>
+                  <input id="viz-expr-input" type="text" class="form-control form-control-sm font-monospace" placeholder="e.g., (5+3)*2" />
+                </div>
+                <div class="col-md-3">
+                  <label for="viz-example-select" class="form-label xsmall text-muted text-uppercase fw-semibold">Example</label>
+                  <select id="viz-example-select" class="form-select form-select-sm"></select>
+                </div>
+                <div class="col-md-2 d-grid">
+                  <button id="viz-load-btn" type="button" class="btn btn-primary btn-sm">
+                    <i class="bi bi-cpu me-1"></i> Load &amp; Trace
+                  </button>
+                </div>
+              </div>
+
+              <div id="viz-alert-box" class="alert d-none mt-3 mb-0"></div>
+
+              <!-- Playback Controls -->
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3 pt-3 border-top border-secondary-subtle">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Playback Controls">
+                  <button id="viz-prev-btn" type="button" class="btn btn-outline-secondary"><i class="bi bi-skip-backward-fill"></i> Prev</button>
+                  <button id="viz-play-btn" type="button" class="btn btn-primary"><i class="bi bi-play-fill"></i> Play</button>
+                  <button id="viz-pause-btn" type="button" class="btn btn-outline-warning" disabled><i class="bi bi-pause-fill"></i> Pause</button>
+                  <button id="viz-next-btn" type="button" class="btn btn-outline-secondary">Next <i class="bi bi-skip-forward-fill"></i></button>
+                  <button id="viz-restart-btn" type="button" class="btn btn-outline-secondary"><i class="bi bi-arrow-repeat"></i> Restart</button>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <label for="viz-speed-select" class="xsmall text-muted mb-0">Speed</label>
+                    <select id="viz-speed-select" class="form-select form-select-sm w-auto">
+                      <option value="1600">0.5x</option>
+                      <option value="900" selected>1x</option>
+                      <option value="550">1.5x</option>
+                      <option value="320">2x</option>
+                      <option value="180">3x</option>
+                    </select>
+                  </div>
+                  <span id="viz-step-counter" class="badge bg-secondary font-monospace">Step 0 / 0</span>
+                </div>
+              </div>
+
+              <div class="progress mt-2" style="height: 5px;">
+                <div id="viz-progress-bar" class="progress-bar bg-primary" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 mb-4">
+            <!-- Animated Vertical Stack Column -->
+            <div class="col-lg-5">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span id="viz-primary-stack-title" class="fw-semibold">Operator Stack</span>
+                  <span class="xsmall text-muted">LIFO (TOP &uarr; / BOTTOM &darr;)</span>
+                </div>
+                <div class="sl-card-body">
+                  <div id="viz-primary-stack" class="stack-tower-frame"></div>
+
+                  <!-- Secondary Expression Stack (shown automatically for Two-Stack Infix-to-Prefix) -->
+                  <div id="viz-secondary-stack-wrap" class="mt-3 d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span id="viz-secondary-stack-title" class="small fw-semibold">Expression Stack</span>
+                      <span class="xsmall text-muted">Secondary Stack</span>
+                    </div>
+                    <div id="viz-secondary-stack" class="stack-tower-frame compact"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live State Inspector -->
+            <div class="col-lg-7">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Live Execution Telemetry</span>
+                  <span id="viz-cur-op" class="badge bg-secondary">IDLE</span>
+                </div>
+                <div class="sl-card-body">
+                  <div class="row g-3 mb-3">
+                    <div class="col-sm-4">
+                      <div class="code-readout text-center">
+                        <div class="xsmall text-muted">Current Token</div>
+                        <div id="viz-cur-token" class="fs-4 fw-bold text-primary">—</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="code-readout text-center">
+                        <div class="xsmall text-muted">Current Stack Size</div>
+                        <div id="viz-cur-size" class="fs-4 fw-bold">0</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="code-readout text-center">
+                        <div class="xsmall text-muted">Max Stack Size</div>
+                        <div id="viz-max-size" class="fs-4 fw-bold">0</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Output Expression / Result</label>
+                    <div id="viz-cur-output" class="code-readout fs-6 fw-semibold">—</div>
+                  </div>
+
+                  <div>
+                    <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Operation Description</label>
+                    <div id="viz-desc-box" class="alert alert-primary py-2 px-3 small mb-0">
+                      Load an expression to step through real Stack operations.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recorded Operation Log Table -->
+          <div class="sl-card">
+            <div class="sl-card-header">
+              <span class="fw-semibold">Recorded Algorithm Operation Log</span>
+              <span class="xsmall text-muted">Click any row to jump directly to that step</span>
+            </div>
+            <div class="sl-card-body p-0">
+              <div class="table-responsive" style="max-height: 340px;">
+                <table class="table table-sm table-hover align-middle mb-0">
+                  <thead class="sticky-top bg-body-tertiary">
+                    <tr>
+                      <th style="width:80px;">Step #</th>
+                      <th style="width:100px;">Token</th>
+                      <th style="width:120px;">Operation</th>
+                      <th>Stack State (Bottom &rarr; Top)</th>
+                      <th>Output</th>
+                    </tr>
+                  </thead>
+                  <tbody id="viz-log-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 5: STACK PLAYGROUND
+             ================================================================ -->
+        <section id="section-playground" class="app-section d-none">
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <div class="sl-card mb-4">
+                <div class="sl-card-header">
+                  <span class="fw-semibold"><i class="bi bi-box-seam-fill text-primary me-2"></i>Stack Controls</span>
+                  <span id="pg-status-badge" class="badge bg-secondary">EMPTY</span>
+                </div>
+                <div class="sl-card-body">
+                  <div id="pg-alert-box" class="alert d-none"></div>
+
+                  <div class="mb-3">
+                    <label for="pg-value-input" class="form-label small fw-medium">Element Value</label>
+                    <div class="input-group">
+                      <input id="pg-value-input" type="text" class="form-control font-monospace" placeholder="Enter any number or symbol..." />
+                      <button id="pg-push-btn" type="button" class="btn btn-primary">
+                        <i class="bi bi-arrow-bar-up me-1"></i> Push
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button id="pg-pop-btn" type="button" class="btn btn-outline-warning btn-sm flex-grow-1">
+                      <i class="bi bi-arrow-bar-down me-1"></i> Pop
+                    </button>
+                    <button id="pg-peek-btn" type="button" class="btn btn-outline-info btn-sm flex-grow-1">
+                      <i class="bi bi-eye me-1"></i> Peek
+                    </button>
+                    <button id="pg-sample-btn" type="button" class="btn btn-outline-primary btn-sm flex-grow-1">
+                      <i class="bi bi-plus-circle me-1"></i> Push Sample
+                    </button>
+                    <button id="pg-clear-btn" type="button" class="btn btn-outline-danger btn-sm">
+                      Clear
+                    </button>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="pg-capacity-select" class="form-label small fw-medium">Maximum Capacity (Overflow Testing)</label>
+                    <select id="pg-capacity-select" class="form-select form-select-sm">
+                      <option value="3">3 elements (Quick Overflow test)</option>
+                      <option value="5" selected>5 elements</option>
+                      <option value="8">8 elements</option>
+                      <option value="10">10 elements</option>
+                      <option value="15">15 elements</option>
+                      <option value="Infinity">Unlimited (Dynamic)</option>
+                    </select>
+                  </div>
+
+                  <div class="row g-2 text-center mb-2">
+                    <div class="col-4">
+                      <div class="code-readout py-2">
+                        <div class="xsmall text-muted">Size</div>
+                        <div id="pg-size-val" class="fs-5 fw-bold">0</div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="code-readout py-2">
+                        <div class="xsmall text-muted">Capacity</div>
+                        <div id="pg-capacity-val" class="fs-5 fw-bold">5</div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="code-readout py-2">
+                        <div class="xsmall text-muted">Top</div>
+                        <div id="pg-top-val" class="fs-6 fw-bold text-primary text-truncate">Empty</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="progress" style="height: 6px;">
+                    <div id="pg-capacity-bar" class="progress-bar bg-primary" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-7">
+              <div class="sl-card mb-4">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Live LIFO Stack Container</span>
+                  <span class="xsmall text-muted">Last-In, First-Out</span>
+                </div>
+                <div class="sl-card-body">
+                  <div id="pg-stack-visual" class="stack-tower-frame"></div>
+                </div>
+              </div>
+
+              <div class="sl-card">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Playground Operation History</span>
+                </div>
+                <div class="sl-card-body p-0">
+                  <div class="table-responsive" style="max-height: 220px;">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th>Time</th>
+                          <th>Op</th>
+                          <th>Value</th>
+                          <th>Result</th>
+                          <th>Size</th>
+                        </tr>
+                      </thead>
+                      <tbody id="pg-history-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 6: ALGORITHM ANALYSIS
+             ================================================================ -->
+        <section id="section-analysis" class="app-section d-none">
+          <div class="sl-card mb-4">
+            <div class="sl-card-header flex-wrap">
+              <div>
+                <span class="fw-semibold"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Actual Recorded Execution Metrics</span>
+                <div class="xsmall text-muted">Empirical counts captured directly from custom Stack methods (never fabricated).</div>
+              </div>
+              <div class="d-flex gap-2 align-items-center">
+                <select id="analysis-run-select" class="form-select form-select-sm" style="max-width: 320px;" aria-label="Select recorded execution"></select>
+                <button id="analysis-clear-btn" type="button" class="btn btn-sm btn-outline-secondary">Clear Runs</button>
+              </div>
+            </div>
+            <div class="sl-card-body">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <div class="code-readout">
+                    <div class="xsmall text-muted">Algorithm Name</div>
+                    <div id="an-algo-name" class="fw-bold fs-5 text-primary">No run recorded yet</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="code-readout">
+                    <div class="xsmall text-muted">Evaluated / Converted Input</div>
+                    <div id="an-expr-val" class="fw-semibold text-truncate">—</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-4 text-center">
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Tokens (n)</div><div id="an-tokens" class="fs-4 fw-bold">0</div></div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Push Ops</div><div id="an-pushes" class="fs-4 fw-bold text-primary">0</div></div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Pop Ops</div><div id="an-pops" class="fs-4 fw-bold text-warning">0</div></div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Peek Ops</div><div id="an-peeks" class="fs-4 fw-bold text-info">0</div></div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Max Stack Size</div><div id="an-maxsize" class="fs-4 fw-bold">0</div></div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                  <div class="code-readout py-2"><div class="xsmall text-muted">Total Ops</div><div id="an-total-ops" class="fs-4 fw-bold text-success">0</div></div>
+                </div>
+              </div>
+
+              <div class="row g-3 align-items-center">
+                <div class="col-lg-8">
+                  <div class="small fw-semibold mb-2">Operation Distribution (Recorded Counts)</div>
+                  <div class="mb-2">
+                    <div class="d-flex justify-content-between xsmall mb-1"><span>PUSH</span><span id="an-bar-push-lbl" class="font-monospace">0</span></div>
+                    <div class="telemetry-bar-track"><div id="an-bar-push" class="telemetry-bar-fill bg-primary" style="width:0%;"></div></div>
+                  </div>
+                  <div class="mb-2">
+                    <div class="d-flex justify-content-between xsmall mb-1"><span>POP</span><span id="an-bar-pop-lbl" class="font-monospace">0</span></div>
+                    <div class="telemetry-bar-track"><div id="an-bar-pop" class="telemetry-bar-fill bg-warning" style="width:0%;"></div></div>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between xsmall mb-1"><span>PEEK</span><span id="an-bar-peek-lbl" class="font-monospace">0</span></div>
+                    <div class="telemetry-bar-track"><div id="an-bar-peek" class="telemetry-bar-fill bg-info" style="width:0%;"></div></div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="calc-result-hero">
+                    <div class="xsmall text-muted text-uppercase fw-semibold mb-2">Theoretical Asymptotic Bounds</div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="small">Time Complexity:</span>
+                      <span id="an-time-comp" class="badge bg-primary font-monospace">—</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="small">Auxiliary Space:</span>
+                      <span id="an-space-comp" class="badge bg-info text-dark font-monospace">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theoretical Complexity Reference Table -->
+          <div class="sl-card">
+            <div class="sl-card-header">
+              <span class="fw-semibold">Theoretical Complexity Reference Table</span>
+              <span class="badge bg-secondary-subtle text-secondary-emphasis">Asymptotic Big-O</span>
+            </div>
+            <div class="sl-card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Algorithm</th>
+                      <th style="width:140px;">Time Complexity</th>
+                      <th style="width:150px;">Space Complexity</th>
+                      <th>Analytical Justification</th>
+                    </tr>
+                  </thead>
+                  <tbody id="analysis-complexity-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 7: EXPRESSION VALIDATION
+             ================================================================ -->
+        <section id="section-validation" class="app-section d-none">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold"><i class="bi bi-shield-check text-primary me-2"></i>Expression Syntax &amp; Safety Validator</span>
+                </div>
+                <div class="sl-card-body">
+                  <div class="row g-2 mb-3">
+                    <div class="col-sm-5">
+                      <label for="val-notation-select" class="form-label xsmall text-muted fw-semibold">Notation Type</label>
+                      <select id="val-notation-select" class="form-select form-select-sm">
+                        <option value="infix" selected>Infix</option>
+                        <option value="postfix">Postfix</option>
+                        <option value="prefix">Prefix</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-7">
+                      <label for="val-example-select" class="form-label xsmall text-muted fw-semibold">Test Cases</label>
+                      <select id="val-example-select" class="form-select form-select-sm"></select>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="val-expr-input" class="form-label small fw-medium">Expression to Validate</label>
+                    <input id="val-expr-input" type="text" class="form-control font-monospace" placeholder="e.g., 5+*3, (5+3, 10/0, or (5+3)*2" autocomplete="off" />
+                    <div class="form-text xsmall">Invalid input is never silently altered — errors are pinpointed cleanly.</div>
+                  </div>
+
+                  <div class="d-flex gap-2 mb-4">
+                    <button id="val-validate-btn" type="button" class="btn btn-primary flex-grow-1">
+                      <i class="bi bi-check2-all me-1"></i> Run Full Validation
+                    </button>
+                    <button id="val-clear-btn" type="button" class="btn btn-outline-secondary">Clear</button>
+                  </div>
+
+                  <div class="code-readout">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <span class="xsmall text-muted text-uppercase fw-semibold">Validation Status</span>
+                      <span id="val-status-badge" class="badge fs-6 bg-secondary">READY</span>
+                    </div>
+                    <div id="val-message" class="small">Enter an expression and click Run Full Validation.</div>
+                  </div>
+
+                  <div id="val-position-wrap" class="mt-3 d-none">
+                    <label class="form-label xsmall text-muted text-uppercase fw-semibold mb-1">Exact Error Position</label>
+                    <pre id="val-position-code" class="val-pointer-pre"></pre>
+                  </div>
+
+                  <div id="val-suggestion-wrap" class="alert alert-info mt-3 mb-0 d-none d-flex align-items-center justify-content-between gap-2 py-2 px-3">
+                    <div class="small">
+                      <strong>Suggested Fix:</strong> <span id="val-suggestion-text" class="font-monospace"></span>
+                    </div>
+                    <button id="val-apply-suggestion-btn" type="button" class="btn btn-sm btn-info text-dark text-nowrap d-none">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Multi-Stage Validation Pipeline</span>
+                  <span class="xsmall text-muted">Stack + Grammar</span>
+                </div>
+                <div class="sl-card-body">
+                  <p class="small text-muted">
+                    Bracket matching using a Stack checks parenthesis balance only. StackLab combines a custom
+                    <strong>LIFO Bracket Stack</strong> with lexical scanning, a finite-state token grammar validator
+                    (or Stack arity validator for Postfix/Prefix), and arithmetic safety checks.
+                  </p>
+                  <ul id="val-checks-list" class="list-group list-group-flush"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 8: CALCULATION HISTORY
+             ================================================================ -->
+        <section id="section-history" class="app-section d-none">
+          <div class="sl-card">
+            <div class="sl-card-header flex-wrap">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-semibold"><i class="bi bi-clock-history text-primary me-2"></i>Saved Calculation History</span>
+                <span id="history-count-badge" class="badge bg-primary-subtle text-primary-emphasis">0 records</span>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <input id="history-search-input" type="search" class="form-control form-control-sm" style="width: 210px;" placeholder="Filter history..." />
+                <button id="history-export-csv-btn" type="button" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-filetype-csv me-1"></i> CSV
+                </button>
+                <button id="history-export-txt-btn" type="button" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-filetype-txt me-1"></i> TXT
+                </button>
+                <button id="history-clear-btn" type="button" class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i> Clear All
+                </button>
+              </div>
+            </div>
+            <div class="sl-card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Expression</th>
+                      <th>Result</th>
+                      <th>Postfix</th>
+                      <th>Prefix</th>
+                      <th>Date &amp; Time</th>
+                      <th style="width:135px;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             MODULE 9: UNDO / REDO (TWO INDEPENDENT CUSTOM STACKS)
+             ================================================================ -->
+        <section id="section-undoredo" class="app-section d-none">
+          <div class="sl-card mb-4">
+            <div class="sl-card-header flex-wrap">
+              <span class="fw-semibold"><i class="bi bi-arrow-counterclockwise text-primary me-2"></i>Dual-Stack Undo / Redo Controller</span>
+              <span class="xsmall text-muted">Synchronized live with Expression Calculator</span>
+            </div>
+            <div class="sl-card-body">
+              <div class="row g-3 align-items-end mb-3">
+                <div class="col-lg-6">
+                  <label for="ur-expr-input" class="form-label small fw-medium">Edit Expression State</label>
+                  <div class="input-group">
+                    <input id="ur-expr-input" type="text" class="form-control font-monospace" placeholder="Type a state e.g. (5+3)*2" />
+                    <button id="ur-commit-btn" type="button" class="btn btn-primary">Push State</button>
+                  </div>
+                </div>
+                <div class="col-lg-6 d-flex flex-wrap gap-2">
+                  <button id="ur-undo-btn" type="button" class="btn btn-outline-warning" disabled>
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Undo (<span id="ur-undo-count">0</span>)
+                  </button>
+                  <button id="ur-redo-btn" type="button" class="btn btn-outline-info" disabled>
+                    <i class="bi bi-arrow-clockwise me-1"></i> Redo (<span id="ur-redo-count">0</span>)
+                  </button>
+                  <button id="ur-clear-btn" type="button" class="btn btn-outline-danger" disabled>
+                    Clear History
+                  </button>
+                </div>
+              </div>
+
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                <span class="xsmall text-muted">Quick State Sequence:</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary font-monospace ur-preset-btn" data-expr="5+3">5+3</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary font-monospace ur-preset-btn" data-expr="(5+3)*2">(5+3)*2</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary font-monospace ur-preset-btn" data-expr="2^3^2">2^3^2</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary font-monospace ur-preset-btn" data-expr="(-2)^2+10">(-2)^2+10</button>
+              </div>
+
+              <div class="code-readout">
+                <div class="xsmall text-muted text-uppercase fw-semibold">Current Active Expression</div>
+                <div id="ur-current-expr" class="fs-5 fw-bold text-primary">(empty)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Undo Stack (Previous States)</span>
+                  <span class="badge bg-warning-subtle text-warning-emphasis">Stack #1</span>
+                </div>
+                <div class="sl-card-body">
+                  <div id="ur-undo-stack-visual" class="stack-tower-frame compact"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Redo Stack (Undone States)</span>
+                  <span class="badge bg-info-subtle text-info-emphasis">Stack #2</span>
+                </div>
+                <div class="sl-card-body">
+                  <div id="ur-redo-stack-visual" class="stack-tower-frame compact"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             ABOUT PROJECT SECTION
+             ================================================================ -->
+        <section id="section-about" class="app-section d-none">
+          <div class="sl-hero-card mb-4">
+            <span class="badge bg-primary mb-2">Academic DSA Documentation</span>
+            <h2 class="h3 fw-bold mb-1">StackLab — Advanced Expression Calculator</h2>
+            <p class="text-muted mb-0">Subject: <strong>Data Structures and Algorithms</strong> &nbsp;|&nbsp; Core Data Structure: <strong>Stack (LIFO)</strong></p>
+          </div>
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-7">
+              <div class="sl-card h-100">
+                <div class="sl-card-header"><span class="fw-semibold">Project Introduction &amp; Objectives</span></div>
+                <div class="sl-card-body small">
+                  <p>
+                    <strong>StackLab</strong> is a browser-native educational engineering tool created to demonstrate how the
+                    <strong>Stack Abstract Data Type (LIFO)</strong> powers compiler expression parsing, notation translation,
+                    arithmetic evaluation, parenthesis verification, and application state history (Undo/Redo).
+                  </p>
+                  <h4 class="h6 fw-bold mt-3">Key Objectives</h4>
+                  <ul>
+                    <li>Implement a strict, encapsulated custom <code>Stack</code> class supporting <code>push</code>, <code>pop</code>, <code>peek</code>, capacity limits, Overflow, and Underflow handling.</li>
+                    <li>Build a multi-digit, decimal, and unary-operator-aware expression tokenizer without using <code>eval()</code> or external parsers.</li>
+                    <li>Implement all six notation conversions (Infix, Postfix, Prefix) and both independent evaluation engines (Left-to-Right Postfix and Right-to-Left Prefix).</li>
+                    <li>Record genuine Stack operations to drive an interactive step-by-step Visualizer and empirical Algorithm Analysis dashboard.</li>
+                  </ul>
+                  <h4 class="h6 fw-bold mt-3">Working Methodology</h4>
+                  <p class="mb-0">
+                    User input passes through lexical tokenization, custom Stack bracket matching, and finite-state grammar validation.
+                    Valid expressions are converted using Shunting-Yard (Infix-to-Postfix) and Two-Stack direct construction (Infix-to-Prefix),
+                    then evaluated via an Operand Stack while emitting immutable trace snapshots and exact Push/Pop/Peek telemetry.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-5">
+              <div class="sl-card h-100">
+                <div class="sl-card-header">
+                  <span class="fw-semibold">Academic Submission Details</span>
+                  <span class="xsmall text-muted">Editable Placeholders</span>
+                </div>
+                <div class="sl-card-body">
+                  <div class="mb-2">
+                    <label for="about-student-name" class="form-label xsmall text-muted mb-1">Student Name</label>
+                    <input id="about-student-name" type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="mb-2">
+                    <label for="about-roll-number" class="form-label xsmall text-muted mb-1">Roll Number / ID</label>
+                    <input id="about-roll-number" type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="mb-2">
+                    <label for="about-college-name" class="form-label xsmall text-muted mb-1">College / University</label>
+                    <input id="about-college-name" type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="mb-2">
+                    <label for="about-faculty-name" class="form-label xsmall text-muted mb-1">Faculty / Project Guide</label>
+                    <input id="about-faculty-name" type="text" class="form-control form-control-sm" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="about-academic-year" class="form-label xsmall text-muted mb-1">Academic Year / Semester</label>
+                    <input id="about-academic-year" type="text" class="form-control form-control-sm" />
+                  </div>
+                  <button id="about-save-meta-btn" type="button" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-save me-1"></i> Save Details Locally
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="sl-card h-100">
+                <div class="sl-card-header"><span class="fw-semibold">Concepts Demonstrated</span></div>
+                <div class="sl-card-body small">
+                  <ul class="mb-0">
+                    <li>LIFO (Last In, First Out) &amp; Stack ADT</li>
+                    <li>Push, Pop, Peek, Overflow &amp; Underflow</li>
+                    <li>Operator Precedence &amp; Associativity</li>
+                    <li>Unary Negation vs. Exponentiation Binding</li>
+                    <li>6-Way Expression Notation Conversion</li>
+                    <li>Postfix &amp; Prefix Stack Evaluation</li>
+                    <li>Bracket Matching &amp; Grammar Validation</li>
+                    <li>Dual-Stack Undo / Redo Architecture</li>
+                    <li>Asymptotic O(n) / O(1) Complexity Analysis</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="sl-card h-100">
+                <div class="sl-card-header"><span class="fw-semibold">Applications &amp; Technologies</span></div>
+                <div class="sl-card-body small">
+                  <strong>Real-World Applications:</strong>
+                  <ul>
+                    <li>Compiler syntax parsing &amp; bytecode virtual machines (JVM, Python VM)</li>
+                    <li>Spreadsheet formula engines &amp; financial calculators</li>
+                    <li>IDE bracket validation &amp; text-editor Undo/Redo stacks</li>
+                  </ul>
+                  <strong>Technologies Used:</strong>
+                  <ul class="mb-0">
+                    <li>HTML5, CSS3, Vanilla JavaScript (ES6+)</li>
+                    <li>Bootstrap 5.3 &amp; Bootstrap Icons</li>
+                    <li>Browser <code>localStorage</code> API (zero backend)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="sl-card h-100">
+                <div class="sl-card-header"><span class="fw-semibold">Limitations &amp; Future Scope</span></div>
+                <div class="sl-card-body small">
+                  <strong>Current Limitations:</strong>
+                  <ul>
+                    <li>Numeric arithmetic only (no symbolic algebra variables like <code>x</code> or <code>y</code>)</li>
+                    <li>IEEE-754 double-precision floating-point range limits</li>
+                    <li>Data persistence is local to the user's browser storage</li>
+                  </ul>
+                  <strong>Future Scope:</strong>
+                  <ul class="mb-0">
+                    <li>Expression Tree (AST) SVG visualization alongside Stack trace</li>
+                    <li>Variable binding environments &amp; user-defined functions</li>
+                    <li>Step-by-step PDF report export for lab assignments</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification Host -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Bootstrap 5.3 Bundle (Offcanvas & Accessibility) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- StackLab Modular JavaScript Architecture (Works over file:// & Live Server) -->
+  <script src="js/stack.js"></script>
+  <script src="js/precedence.js"></script>
+  <script src="js/tokenizer.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/converter.js"></script>
+  <script src="js/evaluator.js"></script>
+  <script src="js/analyzer.js"></script>
+  <script src="js/undoRedo.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/playground.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
