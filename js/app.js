@@ -550,109 +550,138 @@
     }
   }
 
-  function resolveCalculatorExpression(expression) {
-    const varsRaw = document.getElementById('calc-variable-values')?.value || '';
-    const values = {};
-    varsRaw.split(',').map(part => part.trim()).filter(Boolean).forEach(part => {
-      const match = part.match(/^([a-zA-Z])\s*=\s*(-?(?:\d+(?:\.\d+)?|\.\d+))$/);
-      if (!match) throw new Error(`Invalid variable assignment "${part}". Use a=5, b=3.`);
-      values[match[1].toLowerCase()] = Number(match[2]);
-    });
-    const names = [...new Set((expression.match(/[a-zA-Z]/g) || []).map(ch => ch.toLowerCase()))];
-    const missing = names.filter(name => !Object.prototype.hasOwnProperty.call(values, name));
-    if (missing.length) throw new Error(`Missing value for variable${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}. Add ${missing.map(name => `${name}=value`).join(', ')}.`);
-    const resolved = expression.replace(/[a-zA-Z]/g, ch => `(${values[ch.toLowerCase()]})`);
-    return { resolved, values, names };
-  }
+  // function resolveCalculatorExpression(expression) {
+  //   const varsRaw = document.getElementById('calc-variable-values')?.value || '';
+  //   const values = {};
+  //   varsRaw.split(',').map(part => part.trim()).filter(Boolean).forEach(part => {
+  //     const match = part.match(/^([a-zA-Z])\s*=\s*(-?(?:\d+(?:\.\d+)?|\.\d+))$/);
+  //     if (!match) throw new Error(`Invalid variable assignment "${part}". Use a=5, b=3.`);
+  //     values[match[1].toLowerCase()] = Number(match[2]);
+  //   });
+  //   const names = [...new Set((expression.match(/[a-zA-Z]/g) || []).map(ch => ch.toLowerCase()))];
+  //   const missing = names.filter(name => !Object.prototype.hasOwnProperty.call(values, name));
+  //   if (missing.length) throw new Error(`Missing value for variable${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}. Add ${missing.map(name => `${name}=value`).join(', ')}.`);
+  //   const resolved = expression.replace(/[a-zA-Z]/g, ch => `(${values[ch.toLowerCase()]})`);
+  //   return { resolved, values, names };
+  // }
 
   function handleCalculate() {
-    const input = document.getElementById('calc-expr-input');
-    const expr = input.value.trim();
-    commitExpressionState(expr, 'calc-submit');
+  const input = document.getElementById('calc-expr-input');
+  const expr = input.value.trim();
 
-    let res;
-    try {
-      const variableData = resolveCalculatorExpression(expr);
-      res = Evaluator.evaluateInfix(variableData.resolved);
-      if (res.success) {
-        res.original = expr;
-        res.explanation = `Variables: ${variableData.names.map(name => `${name}=${variableData.values[name]}`).join(', ') || 'None'}. ` + res.explanation;
-      }
-    } catch (error) {
-      res = { success: false, error: error.message };
-    }
-    renderCalcResult(res);
+  commitExpressionState(expr, 'calc-submit');
 
-    if (res.success) {
-      const opsUsed = countStackOps(res.stats);
-      Storage.addHistoryRecord({
-        expression: res.original,
-        result: res.result,
-        postfix: res.postfix,
-        prefix: res.prefix
-      });
-      Storage.incrementMetrics({ calculations: 1, stackOperations: opsUsed });
-      Storage.logActivity('Calculate', `${res.original} = ${res.result}`, `Postfix: ${res.postfix}`);
+  let res;
 
-      AppState.analyzer.recordRun({
-        algorithm: 'Postfix Evaluation',
-        expression: res.postfix,
-        tokensProcessed: res.tokensProcessed,
-        stats: res.evaluationStats
-      });
-      AppState.analyzer.recordRun({
-        algorithm: 'Infix to Postfix',
-        expression: res.original,
-        tokensProcessed: res.tokensProcessed,
-        stats: res.conversionStats
-      });
-
-      renderDashboard();
-      renderHistory();
-      renderAnalysis();
-    }
+  if (/[a-zA-Z]/.test(expr)) {
+    res = {
+      success: false,
+      error: 'Calculator supports numeric expressions only. Please use numbers instead of variables.'
+    };
+  } else {
+    res = Evaluator.evaluateInfix(expr);
   }
+
+  renderCalcResult(res);
+
+  if (res.success) {
+    const opsUsed = countStackOps(res.stats);
+
+    Storage.addHistoryRecord({
+      expression: res.original,
+      result: res.result,
+      postfix: res.postfix,
+      prefix: res.prefix
+    });
+
+    Storage.incrementMetrics({
+      calculations: 1,
+      stackOperations: opsUsed
+    });
+
+    Storage.logActivity(
+      'Calculate',
+      `${res.original} = ${res.result}`,
+      `Postfix: ${res.postfix}`
+    );
+
+    AppState.analyzer.recordRun({
+      algorithm: 'Postfix Evaluation',
+      expression: res.postfix,
+      tokensProcessed: res.tokensProcessed,
+      stats: res.evaluationStats
+    });
+
+    AppState.analyzer.recordRun({
+      algorithm: 'Infix to Postfix',
+      expression: res.original,
+      tokensProcessed: res.tokensProcessed,
+      stats: res.conversionStats
+    });
+
+    renderDashboard();
+    renderHistory();
+    renderAnalysis();
+  }
+}
 
   function handleCalcValidateOnly() {
-    const input = document.getElementById('calc-expr-input');
-    const expr = input.value.trim();
-    let resolvedExpr = expr;
-    try { resolvedExpr = resolveCalculatorExpression(expr).resolved; }
-    catch (error) {
-      const alertBox = document.getElementById('calc-alert-box');
-      alertBox.className = 'alert alert-warning py-2 px-3 small mb-3';
-      alertBox.textContent = error.message;
-      alertBox.classList.remove('d-none');
-      return;
-    }
-    const v = Validator.validateInfix(resolvedExpr);
-    const alertBox = document.getElementById('calc-alert-box');
-    const statusEl = document.getElementById('calc-res-status');
+  const input = document.getElementById('calc-expr-input');
+  const expr = input.value.trim();
 
-    if (v.valid) {
-      // Also test mathematical safety (e.g. 10/0)
-      const evalCheck = Evaluator.evaluateInfix(resolvedExpr);
-      if (!evalCheck.success) {
-        alertBox.className = 'alert alert-warning py-2 px-3 small mb-3';
-        alertBox.textContent = `Syntax is valid, but evaluation fails: ${evalCheck.error}`;
-        alertBox.classList.remove('d-none');
-        statusEl.textContent = 'RUNTIME ERROR';
-        statusEl.className = 'badge bg-warning text-dark';
-        return;
-      }
-      alertBox.className = 'alert alert-success py-2 px-3 small mb-3';
-      alertBox.textContent = `Valid expression (${v.tokens.length} tokens). Ready to calculate.`;
-      alertBox.classList.remove('d-none');
-      statusEl.textContent = 'VALID';
-      statusEl.className = 'badge bg-success';
-    } else {
-      alertBox.className = 'alert alert-danger py-2 px-3 small mb-3';
-      alertBox.textContent = v.suggestion ? `${v.message} Suggestion: ${v.suggestion}` : v.message;
-      alertBox.classList.remove('d-none');
-      statusEl.textContent = 'INVALID';
-      statusEl.className = 'badge bg-danger';
-    }
+  const alertBox = document.getElementById('calc-alert-box');
+  const statusEl = document.getElementById('calc-res-status');
+
+  if (/[a-zA-Z]/.test(expr)) {
+    alertBox.className = 'alert alert-danger py-2 px-3 small mb-3';
+    alertBox.textContent =
+      'Calculator supports numeric expressions only. Please remove variables.';
+    alertBox.classList.remove('d-none');
+
+    statusEl.textContent = 'INVALID';
+    statusEl.className = 'badge bg-danger';
+    return;
   }
+
+  const v = Validator.validateInfix(expr);
+
+  if (!v.valid) {
+    alertBox.className = 'alert alert-danger py-2 px-3 small mb-3';
+    alertBox.textContent = v.suggestion
+      ? `${v.message} Suggestion: ${v.suggestion}`
+      : v.message;
+
+    alertBox.classList.remove('d-none');
+
+    statusEl.textContent = 'INVALID';
+    statusEl.className = 'badge bg-danger';
+    return;
+  }
+
+  // Check mathematical safety, including division/modulus by zero.
+  const evalCheck = Evaluator.evaluateInfix(expr);
+
+  if (!evalCheck.success) {
+    alertBox.className = 'alert alert-warning py-2 px-3 small mb-3';
+    alertBox.textContent =
+      `Syntax is valid, but evaluation fails: ${evalCheck.error}`;
+
+    alertBox.classList.remove('d-none');
+
+    statusEl.textContent = 'RUNTIME ERROR';
+    statusEl.className = 'badge bg-warning text-dark';
+    return;
+  }
+
+  alertBox.className = 'alert alert-success py-2 px-3 small mb-3';
+  alertBox.textContent =
+    `Valid numeric expression (${v.tokens.length} tokens). Ready to calculate.`;
+
+  alertBox.classList.remove('d-none');
+
+  statusEl.textContent = 'VALID';
+  statusEl.className = 'badge bg-success';
+}
 
   function initCalculator() {
     const input = document.getElementById('calc-expr-input');

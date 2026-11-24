@@ -118,11 +118,12 @@
     record('START', 'INIT', 'Ready', 'Initialize empty Operand Stack for Left-to-Right Postfix Evaluation.');
 
     const tokens = validation.tokens;
+    console.log('Postfix tokens:', tokens);
     for (let i = 0; i < tokens.length; i += 1) {
       const tok = tokens[i];
 
       if (tok.type === 'NUMBER') {
-        const val = cleanFloat(tok.numericValue);
+        const val = cleanFloat(Number(tok.value));
         stack.push(val);
         record(tok.value, 'PUSH', `Top: ${val}`, `Pushed numeric operand ${val} onto Stack.`);
       } else if (tok.type === 'UNARY_OP') {
@@ -216,7 +217,7 @@
       const tok = tokens[i];
 
       if (tok.type === 'NUMBER') {
-        const val = cleanFloat(tok.numericValue);
+        const val = cleanFloat(Number(tok.value));
         stack.push(val);
         record(tok.value, 'PUSH', `Top: ${val}`, `Scanned right-to-left: pushed operand ${val} onto Stack.`);
       } else if (tok.type === 'UNARY_OP') {

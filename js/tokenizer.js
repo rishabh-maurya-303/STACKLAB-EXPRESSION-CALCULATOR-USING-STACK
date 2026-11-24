@@ -53,7 +53,7 @@
                 continue;
             }
 
-            // Alphabetical operands / variables
+            // Symbolic operands for expression conversion
             if (/[A-Za-z_]/.test(ch)) {
 
                 const start = i;
