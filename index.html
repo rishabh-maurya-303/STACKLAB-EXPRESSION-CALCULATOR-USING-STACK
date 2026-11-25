@@ -152,12 +152,9 @@
                 <span class="badge bg-primary mb-2">Data Structures &amp; Algorithms Project</span>
                 <h2 class="h3 fw-bold mb-2">StackLab — Advanced Expression Calculator</h2>
                 <p class="text-muted mb-3">
-                  Interactive educational developer workbench demonstrating real-world applications of the
-                  <strong>Stack (LIFO)</strong> Abstract Data Type across mathematical expression parsing, six-way
-                  notation conversion,
-                  Postfix/Prefix evaluation, bracket validation, step-by-step trace visualization, and two-stack
-                  Undo/Redo —
-                  implemented purely in Vanilla JavaScript without <code>eval()</code>.
+                  StackLab is a DSA project that demonstrates how stacks are used
+                  to convert, evaluate, and validate mathematical expressions.
+                  It also includes stack visualization, operation analysis, and Undo/Redo.
                 </p>
                 <div class="d-flex flex-wrap gap-2">
                   <button type="button" class="btn btn-primary btn-sm px-3" data-nav-target="calculator">
@@ -178,7 +175,8 @@
                   <div><code>pop()</code> &rarr; Top removal <code>O(1)</code></div>
                   <div><code>peek()</code> &rarr; Top inspection <code>O(1)</code></div>
                   <div class="mt-2 text-primary xsmall">Precedence: <code>( )</code> &gt; <code>^</code> (R) &gt;
-                    <code>u-</code> &gt; <code>* / %</code> &gt; <code>+ -</code></div>
+                    <code>u-</code> &gt; <code>* / %</code> &gt; <code>+ -</code>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1282,32 +1280,29 @@
                 <div class="sl-card-header"><span class="fw-semibold">Project Introduction &amp; Objectives</span></div>
                 <div class="sl-card-body small">
                   <p>
-                    <strong>StackLab</strong> is a browser-native educational engineering tool created to demonstrate
-                    how the
-                    <strong>Stack Abstract Data Type (LIFO)</strong> powers compiler expression parsing, notation
-                    translation,
-                    arithmetic evaluation, parenthesis verification, and application state history (Undo/Redo).
-                  </p>
-                  <h4 class="h6 fw-bold mt-3">Key Objectives</h4>
-                  <ul>
-                    <li>Implement a strict, encapsulated custom <code>Stack</code> class supporting <code>push</code>,
-                      <code>pop</code>, <code>peek</code>, capacity limits, Overflow, and Underflow handling.</li>
-                    <li>Build a multi-digit, decimal, and unary-operator-aware expression tokenizer without using
-                      <code>eval()</code> or external parsers.</li>
-                    <li>Implement all six notation conversions (Infix, Postfix, Prefix) and both independent evaluation
-                      engines (Left-to-Right Postfix and Right-to-Left Prefix).</li>
-                    <li>Record genuine Stack operations to drive an interactive step-by-step Visualizer and empirical
-                      Algorithm Analysis dashboard.</li>
-                  </ul>
-                  <h4 class="h6 fw-bold mt-3">Working Methodology</h4>
-                  <p class="mb-0">
-                    User input passes through lexical tokenization, custom Stack bracket matching, and finite-state
-                    grammar validation.
-                    Valid expressions are converted using Shunting-Yard (Infix-to-Postfix) and Two-Stack direct
-                    construction (Infix-to-Prefix),
-                    then evaluated via an Operand Stack while emitting immutable trace snapshots and exact Push/Pop/Peek
-                    telemetry.
-                  </p>
+  <strong>StackLab</strong> is a web-based project developed to demonstrate
+  the applications of the Stack data structure. It shows how stacks help
+  in expression conversion, calculation, validation, and managing previous states.
+</p>
+
+<h4 class="h6 fw-bold mt-3">Project Objectives</h4>
+<ul>
+  <li>Understand the working of a Stack using LIFO.</li>
+  <li>Perform Push, Pop, and Peek operations.</li>
+  <li>Convert expressions between Infix, Postfix, and Prefix.</li>
+  <li>Evaluate mathematical expressions using stacks.</li>
+  <li>Visualize stack operations step by step.</li>
+  <li>Understand Undo and Redo using two stacks.</li>
+  <li>Study the time and space complexity of algorithms.</li>
+</ul>
+
+<h4 class="h6 fw-bold mt-3">Working Method</h4>
+<p class="mb-0">
+  The user enters an expression, which is checked for errors.
+  The application then uses stack operations to convert or evaluate it.
+  Each operation can be viewed through the visualizer, while the
+  analysis section displays operation counts and algorithm complexity.
+</p>
                 </div>
               </div>
             </div>

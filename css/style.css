@@ -293,3 +293,76 @@ body {
 .form-control:focus, .form-select:focus { border-color: var(--sl-accent); box-shadow: 0 0 0 .2rem var(--sl-accent-soft); }
 .btn { border-radius: 9px; font-weight: 550; }
 .kpi-card { min-height: 104px; }
+
+
+/* ==========================================================================
+   Desktop Sidebar Collapse / Expand
+   ========================================================================== */
+
+.desktop-sidebar {
+  transition: width 0.25s ease, min-width 0.25s ease;
+  overflow-x: hidden;
+}
+
+.desktop-sidebar.collapsed {
+  width: 76px;
+  min-width: 76px;
+}
+
+.desktop-sidebar.collapsed .brand-header {
+  justify-content: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.desktop-sidebar.collapsed .brand-header > div {
+  display: none;
+}
+
+.desktop-sidebar.collapsed .sidebar-section-label,
+.desktop-sidebar.collapsed .sidebar-link span,
+.desktop-sidebar.collapsed .sidebar-footer .theme-label {
+  display: none;
+}
+
+.desktop-sidebar.collapsed .sidebar-nav {
+  padding-left: 0.65rem;
+  padding-right: 0.65rem;
+}
+
+.desktop-sidebar.collapsed .sidebar-link {
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.desktop-sidebar.collapsed .sidebar-link i {
+  width: auto;
+  font-size: 1.15rem;
+}
+
+.desktop-sidebar.collapsed .sidebar-footer {
+  padding: 0.75rem 0.5rem;
+}
+
+.desktop-sidebar.collapsed .sidebar-footer .theme-toggle-btn {
+  padding: 0.65rem;
+}
+
+#sidebar-toggle-btn {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+}
+
+#sidebar-toggle-btn i {
+  font-size: 1.1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-sidebar {
+    transition: none;
+  }
+}
